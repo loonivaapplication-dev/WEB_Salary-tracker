@@ -32,7 +32,66 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $result = ['weekly_hours' => $weekly_hours, 'weekly'=> $weekly,
         'monthly'=> $monthly];
 
+        //Save the hourly rate if th student ticked the box
+        if(isset ($_POST['save_rate'])) {
+            if($saved) {
+                $stmt = $pdo->prepare("UPDATE Wage_Settings SET hourly_rate =
+                ? WHERE user_id = ?");
+                $stmt = $pdo->prepar("INSERT INTO Wage_settings (user_id,
+                 hourly_rate VALUES (?, ?)");
+                 $stmt-> execute([$user_id, $rate]);
+
+            }
+        }
+
     }
 }
-
 ?>
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Salary Calculator</title> <link rel ="stylesheet"
+        href="style.css">
+    </head>
+    <body>
+        <h1>Salary Calculator </h1>
+        <p><a href = "add_work.php">Working Hours</a></p>
+
+        <?php if($error): ?><div class="error"><?= h($error) ?></div><?php endif; ?>
+
+        <form method="post">
+            <label>Hours Worked</label>
+            <input type="number" name="hours" step="0.25" min="0.25" required >
+
+            <label>Hours entered are</label>
+            <select name ="type">
+                <option value = "daily">Per day</option>
+                <option value="weekly"> Per week</option>
+            </select>
+
+            <label>Days worked per week (only for "Per day")</label>
+            <input type="number" name = "days_per_week" min="1" max="7" value ="5">
+
+            <label><input type="checkbox" name="save_rate" style = "width: auto">
+        Save this hourly wage</label>
+
+        <button type="submit">Calculate</button>
+        </form>
+
+        <?php if ($result): ?>
+            <div class="result">
+                <h2>Estimated Earnings</h2>
+                <p>Weekly hours: <strong><?= number_format($result['weekly_hours'],2) ?>
+            </strong></p>
+                <p>Weekly earnings: <strong><?=  number_format($result['weekly'],2) ?>
+            </strong></p>
+                <p>Monthly earnings (approx.): <strong><?= 
+                number_format($result['monthly'], 2) ?></strong></p>
+            </div>
+            <?php endif; ?>
+
+    </body>
+    </html>
