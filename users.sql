@@ -1,0 +1,9 @@
+CREATE DATABASE IF NOT EXISTS salary_calculator CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE salary_calculator;
+
+CREATE TABLE IF NOT EXISTS Users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(254) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL
+) ENGINE=InnoDB;
